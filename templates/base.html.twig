@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <!-- title for the navigator -->
-    <title>{% block title %}Bienvenu sur le site sortir.com!{% endblock %}</title>
+    <title>{% block title %}Sortir.com{% endblock %}</title>
 
     <!-- required meta tags -->
     <meta charset="UTF-8">
@@ -25,25 +25,63 @@
     <![endif]-->
 
     {% block stylesheets %}
+        <!-- favicon -->
+        <link rel="icon" href="{{ asset('image/logo.jpg') }}">
         <!-- declaration du fichier CSS dans sa version minifiée -->
         <link href="{{ asset('css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,200&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.min.css.map') }}">
+        <link rel="stylesheet" href="{{ asset('css/personnalisation.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/datetimepicker.css') }}">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     {% endblock %}
 </head>
 <body>
 {% include ('inc/header.html.twig') %}
 
+<div class="container">
 {% block main %}
+    <div class="row">
+        {% for label, messages  in app.flashes %}
+            <div id="modal_alert" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Message</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label }} mt-3">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
+</div>
+
+{% include('inc/footer.html.twig') %}
 
 {% block javascripts %}
-    <!—pour ne pas ralentir le chargement, en fin de page-->
-    <!--librairie jQuery minifiée récupérée indépendamment-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!—-pour ne pas ralentir le chargement, en fin de page-->
+    <!--librairie jquery minifiée-->
+    <script src="{{ asset('js/jquery-3.6.1.min.js') }}"></script>
     <!--si vous utilisez des composants JavaScript, référencez la librairie de Bootstrap-->
     <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
+    <!--scripts pour la gestion des dates -->
+    <script src="{{ asset('js/datetimepicker.js') }}"></script>
+    <script src="{{ asset('js/gestionDates.js') }}"></script>
 
 {% endblock %}
 </body>
