@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Se connecter{% endblock %}
+
+{% block main %}
+        {{ parent() }}
+<div class="row justify-content-center">
+    <div class="col-xs-11 col-offset-md-1">
+        {% if error %}
+            <div class="alert alert-danger">Authentification incorrecte</div>
+        {% endif %}
+
+        {#titre page#}
+        <div class="row mb-5">
+            <div class="col text-center">
+                <h1>Authentification</h1>
+            </div>
+        </div>
+
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+        <form method="post">
+            <div class="col mb-5">
+                <div class="form-group row">
+                    <label for="inputEmail" class="col-5 col-form-label">Login :</label>
+                    <div class="col-7">
+                        <input type="text" name="email" class="form-control" required autofocus id="inputEmail" placeholder="" value="{{ last_username }}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-5 col-form-label">Mot de passe :</label>
+                    <div class="col-7">
+                        <input type="password" name="password" class="form-control" required id="inputPassword" placeholder="">
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            {# partie du bas : connexion / se souvenir de moi / mdp oublié#}
+            <div class="row text-center">
+                <div class="col">
+                    <div class="form-group row">
+                        <div class="col-5 mb-3">
+                            <div class="form-group row">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-outline-primary">Connexion</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-7">
+                            <div class="form-check">
+                                {# See https://symfony.com/doc/current/security/remember_me.html #}
+                                <input class="form-check-input" type="checkbox" name="_remember_me" id="souvenir">
+                                <label class="form-check-label" for="souvenir">Se souvenir de moi</label>
+                            </div>
+
+                            <div>
+                                <u><a href="#">Mot de passe oublié</a></u>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}
