@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -19,43 +22,87 @@ class Sortie
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\Length(max=50, maxMessage="{{ limit }} caractères maxi")
+     * @Assert\NotBlank(message="Le nom est obligatoire")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(message="La date et l'heure de début sont obligatoires")
+     * @Assert\GreaterThan("now", message="Cette valeur doit être supérieure à la date du jour")
+     * @Assert\DateTime
      */
     private $dateHeureDebut;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="La durée est obligatoire")
+     * @Assert\GreaterThan(0, message="Cette valeur doit être positive")
      */
-    private $dateHeureFin;
+    private $duree;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(message="La date limite d'inscription est obligatoire")
+     * @Assert\LessThan(propertyPath="dateHeureDebut", message="Cette valeur doit être inférieure à la date de la sortie")
+     * @Assert\GreaterThan("now", message="Cette valeur doit être supérieure à la date du jour")
+     * @Assert\DateTime
      */
     private $dateLimiteInscription;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Le nombre d'inscriptions max est obligatoire")
+     * @Assert\GreaterThan(0, message="Cette valeur doit être positive")
      */
     private $nbInscriptionMax;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max=255, maxMessage="{{ limit }} caractères maxi")
+     * @Assert\NotBlank(message="Les infos sortie sont obligatoires")
      */
     private $infosSortie;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(max=255, maxMessage="{{ limit }} caractères maxi")
      */
-    private $estPublie;
+    private $motifAnnulation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $motifAnnulation;
+    private $photoSortie;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Etat", inversedBy="sorties")
+     */
+    private $etat;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Lieu", inversedBy="sorties")
+     * @Assert\NotNull()
+     */
+    private $lieu;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", mappedBy="sorties")
+     */
+    private $participants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="sortiesOrganisees")
+     */
+    private $organisateur;
+
+    public function __construct()
+    {
+        $this->participants = new ArrayCollection();
+
+    }
 
     public function getId(): ?int
     {
@@ -86,14 +133,14 @@ class Sortie
         return $this;
     }
 
-    public function getDateHeureFin(): ?\DateTimeInterface
+    public function getDuree(): ?int
     {
-        return $this->dateHeureFin;
+        return $this->duree;
     }
 
-    public function setDateHeureFin(\DateTimeInterface $dateHeureFin): self
+    public function setDuree(int $duree): self
     {
-        $this->dateHeureFin = $dateHeureFin;
+        $this->duree = $duree;
 
         return $this;
     }
@@ -109,6 +156,7 @@ class Sortie
 
         return $this;
     }
+
 
     public function getNbInscriptionMax(): ?int
     {
@@ -134,18 +182,6 @@ class Sortie
         return $this;
     }
 
-    public function getEstPublie(): ?bool
-    {
-        return $this->estPublie;
-    }
-
-    public function setEstPublie(?bool $estPublie): self
-    {
-        $this->estPublie = $estPublie;
-
-        return $this;
-    }
-
     public function getMotifAnnulation(): ?string
     {
         return $this->motifAnnulation;
@@ -157,4 +193,84 @@ class Sortie
 
         return $this;
     }
+
+    public function getPhotoSortie(): ?string
+    {
+        return $this->photoSortie;
+    }
+
+    public function setPhotoSortie(?string $photoSortie): self
+    {
+        $this->photoSortie = $photoSortie;
+
+        return $this;
+    }
+
+    public function getEtat(): ?Etat
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?Etat $etat): self
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getLieu(): ?Lieu
+    {
+        return $this->lieu;
+    }
+
+    public function setLieu(?Lieu $lieu): self
+    {
+        $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Participant[]
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    public function addParticipant(Participant $participant): self
+    {
+        if($this->participants->count() <= $this->nbInscriptionMax){
+            if (!$this->participants->contains($participant)) {
+                $this->participants[] = $participant;
+                $participant->addSortie($this);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): self
+    {
+        if ($this->participants->contains($participant)) {
+            $this->participants->removeElement($participant);
+            $participant->removeSortie($this);
+        }
+
+        return $this;
+    }
+
+    public function getOrganisateur(): ?Participant
+    {
+        return $this->organisateur;
+    }
+
+    public function setOrganisateur(?Participant $organisateur): self
+    {
+        $this->organisateur = $organisateur;
+
+        return $this;
+    }
+
+
 }

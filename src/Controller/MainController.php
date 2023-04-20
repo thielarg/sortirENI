@@ -13,8 +13,11 @@ class MainController extends AbstractController
      */
     public function index(): Response
     {
+        $erreur = "'essai d'affichage de l'erreur";
+
         return $this->render('main/index.html.twig', [
-            'error' => 'essai d\'affichage de l\'erreur',
+            "error" => $erreur,
         ]);
+//        return $this->render('main/index.html.twig', compact("erreur"));
     }
 }
