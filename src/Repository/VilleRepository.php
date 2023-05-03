@@ -19,6 +19,22 @@ class VilleRepository extends ServiceEntityRepository
         parent::__construct($registry, Ville::class);
     }
 
+    /*
+    * Fonction permettant de rechercher un ville sur son nom ou sur le code postal
+    * Utilisée dans la fenetre modale (ajout lieu)
+    */
+    public function findAjaxRecherche($recherche){
+        return $this->createQueryBuilder('ville')
+            ->where('ville.nom LIKE :recherche')
+            ->setParameter('recherche', '%'. $recherche .'%')
+            ->orWhere('ville.codePostal LIKE :recherchecode')
+            ->setParameter('recherchecode',$recherche .'%')
+            ->orderBy('ville.nom')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Ville[] Returns an array of Ville objects
     //  */

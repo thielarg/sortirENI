@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=EtatRepository::class)
+ * @ORM\Table(name="Etats")
  * @UniqueEntity(fields={"libelle"})
  */
 class Etat

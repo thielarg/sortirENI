@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet %}
+{% endblock %}
+
+{% block main %}
+    {{ parent() }}
+    <h1>Gestion des villes</h1>
+    <div id="message"></div>
+    <form>
+        <input type="text" class="form-control" id="inputFiltrerVille" placeholder="Rechercher" />
+    </form>
+    <table class="table">
+        <tbody id="table_ville">
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/gestionVilles.js') }}"></script>
+{% endblock %}

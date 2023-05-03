@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    {{ parent() }}
+    <h1>Gestion des sites</h1>
+    <div id="message"></div>
+    <form>
+        <input type="text" class="form-control" id="inputFiltrerSite" placeholder="Rechercher" />
+    </form>
+    <table class="table">
+        <tbody id="table_site">
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/gestionSites.js') }}"></script>
+{% endblock %}

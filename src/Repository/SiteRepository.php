@@ -19,6 +19,20 @@ class SiteRepository extends ServiceEntityRepository
         parent::__construct($registry, Site::class);
     }
 
+    /*
+ * Fonction permettant de rechercher un site en fonction de son nom
+ */
+    public function findAjaxRecherche($recherche){
+        $resultat= $this->createQueryBuilder('site')
+            ->where('site.nom LIKE :recherche')
+            ->setParameter('recherche', '%'. $recherche .'%')
+            ->orderBy('site.nom')
+            ->getQuery()
+            ->getResult()
+            ;
+        return $resultat;
+    }
+
     // /**
     //  * @return Site[] Returns an array of Site objects
     //  */

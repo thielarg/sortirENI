@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    {{ parent() }}
+    <div class="row d-flex flex-row-reverse mr-1">
+        <div class="d-flex flex-column">
+            <span><h6>Date du jour : {{ 'now' | date('d-m-Y') }}</h6></span>
+            <span><h6>Participant : {{ app.user.username }}</h6></span>
+        </div>
+    </div>
+    <h3>Filtrer</h3>
+    <form action="{{ path('admin_liste_des_participants') }}" method="get" class="row">
+        <div class="col-xs-12 col-sm-6">
+            <input type="text"class="form-control mb-3" placeholder="Rechercher un participant par mot-clé" name="recherche_terme" id="recherche_terme">
+        </div>
+        <div class="col-xs-12 col-sm-6 text-center">
+            <input type="submit" class="btn btn-outline-dark mr-2 mt-1" value="Rechercher" id="btnRechercher" name="btnRechercher">
+            <a href="{{ path('admin_liste_des_participants') }}" class="btn btn-outline-dark mr-2 ml-2 mt-1">Réinitialiser</a>
+
+            {#                            Si je suis l'administrateur#}
+            {% if app.user.administrateur == 1 %}
+                {#                                    Je peux importer un fichier csv#}
+                <a href="{{ path('admin_import_index') }}" class="btn btn-outline-success ml-2 mt-1">Import fichier.csv</a>
+
+            {% endif %}
+
+        </div>
+    </form>
+    <h1>Liste des participants</h1>
+
+    <div class="col text-center">
+        <a href="{{ path('admin_inscrire') }}" class="btn btn-outline-primary m-2">Inscrire</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Pseudo</th>
+            <th scope="col" class="d-none d-sm-table-cell">Nom participant</th>
+            <th scope="col" class="d-none d-sm-table-cell">Prénom participant</th>
+            <th scope="col" class="d-none d-sm-table-cell">Actif/Inactif</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%  if participants | length == 0 %}
+            <tr>
+                <td class="text-center"colspan="8">Aucun résultat</td>
+            </tr>
+        {%  else %}
+            {% for participant in participants %}
+                <tr>
+                    <td>{{ participant.username }}</td>
+                    <td class="d-none d-sm-table-cell">{{ participant.nom }}</td>
+                    <td class="d-none d-sm-table-cell">{{ participant.prenom }}</td>
+                    {% if participant.actif == true %}
+                    <td class="d-none d-sm-table-cell">Actif
+                    {% else %}
+                    <td class="d-none d-sm-table-cell rouge">Inactif
+                    {% endif %}
+                    </td>
+                    <td><a href="{{ path('admin_participant_detail', {'id' : participant.id}) }}" class="btn btn-outline-info">Modifier</a></td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+
+        </tbody>
+    </table>
+
+    <div class="col text-center">
+        <a href="{{ path('sortie_liste') }}" class="btn btn-outline-secondary m-2">Retour</a>
+    </div>
+{% endblock %}
+
+{% block title %}Modification Participant{% endblock %}
+

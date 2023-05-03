@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+
+<div class="text-center">
+<form enctype="multipart/form-data" action="{{ path('admin_import_action') }}" method="post">
+    <h1 class="mb-5">Import de fichiers</h1>
+
+    <h6 class="mb-4">Import uniquement de fichiers au format CSV</h6>
+
+    <div class="row">
+        <div class="col">
+    <input class="mt-1" name="fileCSV" type="file" accept=".csv"/>
+    <input class="btn btn-outline-primary mt-1" type="submit" value="Envoyez le fichier" />
+        </div>
+    </div>
+
+</form>
+</div>
+
+{% endblock %}

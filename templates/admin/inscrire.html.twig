@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+
+{% block main %}
+    {{ parent() }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.telephone) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.site) }}
+
+    <div class="text-center">
+    <button type="submit" class="btn btn-outline-primary mr-2">Inscrire</button>
+    <a href="{{ path('admin_liste_des_participants') }}" class="btn btn-outline-secondary ml-2">Retour</a>
+    </div>
+
+    {{ form_end(form, {render_rest:false}) }}
+{% endblock %}
+
+
+{% block title %} Inscription Participant {% endblock %}

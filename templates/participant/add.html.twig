@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Création compte | {{ parent() }} {% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <h1 class="text-center">Mon profil</h1>
+
+<div class="row">
+    <div class="col mt-3 mb-3 text-center">
+        {% if app.user.photo %}
+                <img src="{{ asset('uploads/users/photos/' ~ app.user.photo) }}" alt="Photo_de_profil" class="img-thumbnail rounded img-fluid">
+        {% endif %}
+    </div>
+
+<div class="col-xs-12 col-sm-9">
+    {# ouverture du formulaire #}
+    {{ form_start(form) }}
+
+    {#    <div class="form-group">
+         generation du label
+        {# form_label(form.username) }}<sup>*</sup>&nbsp;:
+         affichage des erreurs
+        {{ form_errors(form.username) }}
+         generation de l'input
+        {{ form_widget(form.username) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.prenom) }}<sup>*</sup>&nbsp;:
+        {{ form_widget(form.prenom) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.nom) }}<sup>*</sup>&nbsp;:
+        {{ form_widget(form.nom) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.telephone) }}<sup>*</sup>&nbsp;:
+        {{ form_widget(form.telephone) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.mail) }}<sup>*</sup>&nbsp;:
+        {{ form_widget(form.mail) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.password) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.site) }}<sup>*</sup>&nbsp;:
+        {{ form_widget(form.site) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.photo) }}<sup>*</sup>&nbsp;:
+        {{ form_widget(form.photo) }}
+    </div>
+#}
+    {# contenu du formulaire #}
+     {{ form_widget(form) }}
+
+    <div class="text-center">
+
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+            Enregistrer
+        </button>
+        <a href="{{ path('sortie_liste') }}" class="btn btn-outline-secondary ml-2">Annuler</a>
+    </div>
+    <br>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmez !!!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Sauvegarder mon profil
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" name="btnEnregistrer" class="btn btn-outline-primary mr-2">Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# fermeture du formulaire #}
+    {{ form_end(form) }}
+
+</div>
+</div>
+
+{% endblock %}

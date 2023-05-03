@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+    <h1>Annuler une sortie</h1>
+    <table class="table">
+        <tr>
+            <td>Nom de la sortie</td>
+            <td>{{ sortie.nom }}</td>
+        </tr>
+        <tr>
+            <td>Date et heure de la sortie</td>
+            <td>{{ sortie.dateHeureDebut | date('d-m-Y') }}</td>
+        </tr>
+        <tr>
+            <td>Ville organisatrice</td>
+            <td>{{ sortie.organisateur.site.nom }}</td>
+        </tr>
+        <tr>
+            <td>Lieu</td>
+            <td>{{ sortie.lieu.nom }} {{ sortie.lieu.rue }} {{ sortie.organisateur.site.nom }}</td>
+        </tr>
+    </table>
+    {{ form_start(form) }}
+    {{ form_row(form.motifAnnulation) }}
+    <button type="submit" class="btn btn-outline-primary">Enregistrer</button>
+    <a href="{{ path('sortie_liste') }}" class="btn btn-outline-secondary">Retour</a>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block title %}Annulation sortie {% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="row mt-5">
+        <div class="col">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td class="text-center" colspan="2"><h1>Activer/Désactiver ou Supprimer un participant</h1></td>
+                </tr>
+                <tr>
+                    <td class="texte">Username</td>
+                    <td>{{ participant.username }}</td>
+                </tr>
+                <tr>
+                    <td class="texte">Prénom</td>
+                    <td>{{ participant.prenom }}</td>
+                </tr>
+                <tr>
+                    <td class="texte">Nom</td>
+                    <td>{{ participant.nom }}</td>
+                </tr>
+                <tr>
+                    <td class="texte">Téléphone</td>
+                    <td>{{ participant.telephone }}</td>
+                </tr>
+                <tr>
+                    <td class="texte">Email</td>
+                    <td>{{ participant.mail }}</td>
+                </tr>
+                <tr>
+                    <td class="texte">Ville de rattachement</td>
+                    <td>{{ participant.site.nom }}</td>
+                </tr>
+                <tr>
+                    <td class="texte">Etat</td>
+                    {% if participant.actif == true %}
+                    <td>Actif
+                    {% else %}
+                    <td class="rouge">Inactif
+                    {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center">
+                {% if participant.actif %}
+                <a href="{{ path('admin_desactiver', {'participantid' : participant.id}) }}" class="btn btn-outline-warning mr-1">Désactiver</a>
+                {% else %}
+                <a href="{{ path('admin_activer', {'participantid' : participant.id}) }}" class="btn btn-outline-warning mr-1">Activer</a>
+                {% endif %}
+                <a href="{{ path('admin_supprimer', {'participantid' : participant.id}) }}" class="btn btn-outline-danger mr-1">Supprimer</a>
+                <a href="{{ path('admin_liste_des_participants') }}" class="btn btn-outline-secondary">Retour</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

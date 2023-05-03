@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="text-center mb-5">
+        <h1>Créer une sortie</h1>
+    </div>
+{{ form_start(form) }}
+<div class="row mb-3">
+    {# colonne de gauche #}
+    <div class="col-xs-12 col-sm-6">
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.dateHeureDebut) }}
+                    {{ form_row(form.dateLimiteInscription) }}
+                    {{ form_row(form.nbInscriptionsMax) }}
+                    {{ form_row(form.duree) }}
+    </div>
+    {# colonne de droite #}
+    <div class="col-xs-12 col-sm-6">
+                    {{ form_row(form.infosSortie) }}
+                    {{ form_row(form.ville) }}
+                    {{ form_widget(form) }}
+        {# ajout du bouton permettant d'ajouter un lieu #}
+        <button type="button" class="btn btn-outline-info rounded-circle" data-toggle="modal" data-target="#lieuModal">
+            +
+        </button>
+    </div>
+</div>
+    {# modale permettant d'ajouter un lieu #}
+    <div class="modal fade" id="lieuModal" tabindex="-1" role="dialog" aria-labelledby="lieuModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lieuModalLabel">Ajouter un lieu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal_nouveau_lieu">
+                    {# liste déroulante selectVille #}
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Ville</label>
+                        <select class="form-control" id="selectVille">
+                        </select>
+                    </div>
+                    {# champ de saisie inputNomLieu #}
+                    <div class="form-group">
+                        <label for="inputNomLieu">Nom</label>
+                        <input type="text" class="form-control" id="inputNomLieu" placeholder="Nom">
+                    </div>
+                    {# champ de saisie inputRueLieu #}
+                    <div class="form-group">
+                        <label for="inputRueLieu">Rue</label>
+                        <input type="text" class="form-control" id="inputRueLieu" placeholder="Rue">
+                    </div>
+                    {# champ de saisie inputLatitudeLieu #}
+                    <div class="form-group">
+                        <label for="inputLatitudeLieu">Latitude</label>
+                        <input type="text" class="form-control" id="inputLatitudeLieu" placeholder="Latitude">
+                    </div>
+                    {# champ de saisie inputLongitudeLieu #}
+                    <div class="form-group">
+                        <label for="inputLongitudeLieu">Longitude</label>
+                        <input type="text" class="form-control" id="inputLongitudeLieu" placeholder="Longitude">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="modal_nouveau_lieu_message"></div> {# ici le message ajout sucess ou ajout done #}
+                    <input type="button" id="inputReinitialiser" class="btn btn-outline-secondary" data-dismiss="modal" value="Fermer"/>
+                    <input type="button" id="inputEnregistrerLieu" class="btn btn-outline-primary" value="Ajouter"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button type="submit" name="valider" value="save" class="btn btn-outline-primary mt-1 mr-2">Enregistrer</button>
+        <button type="submit" name="valider" value="publish" class="btn btn-outline-warning mt-1 mr-2">Publier la sortie</button>
+        <a href="{{ path('sortie_liste') }}" class="btn btn-outline-secondary mt-1">Annuler</a>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/listesLiees.js') }}"></script>
+    <script src="{{ asset('js/fenetreModale.js') }}"></script>
+
+{% endblock %}
