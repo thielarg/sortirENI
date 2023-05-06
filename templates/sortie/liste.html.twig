@@ -6,14 +6,9 @@
 
 {% block main %}
     {{ parent() }}
-    <div class="row d-flex flex-row-reverse mr-1">
-        <div class="d-flex flex-column">
-            <span><h6>Date du jour : {{ 'now' | date('d-m-Y') }}</h6></span>
-            <span><h6>Participant : {{ app.user.username }}</h6></span>
-        </div>
-    </div>
 
 {# LES FILTRES #}
+{# Attention seule les "name" sur les champs seront dans la requete HTTP #}
     <h3>Filtrer les sorties</h3>
     <form action="{{ path('sortie_liste') }}" method="get" class="row">
         <div class="col-sm-6">
@@ -69,6 +64,7 @@
 
         </div>
     </form>
+
 {# LISTE DES SORTIES #}
     <h1>Liste des sorties</h1>
     <div class="row">
@@ -80,6 +76,7 @@
         <div class="col">
             <div class="table-responsive">
                 <table class="table table-striped">
+                    {# ENTETE DU TABLEAU #}
                     <thead>
                     <tr>
                         <th scope="col" style="width: 21%">Nom</th>
@@ -92,6 +89,7 @@
                         <th scope="col" style="width: 35%">Actions</th>
                     </tr>
                     </thead>
+                    {# LES LIGNES DU TABLEAU #}
                     <tbody>
                         {%  if sorties | length == 0 %}
                             <tr>

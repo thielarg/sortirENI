@@ -2,12 +2,6 @@
 
 {% block main %}
     {{ parent() }}
-    <div class="row d-flex flex-row-reverse mr-1">
-        <div class="d-flex flex-column">
-            <span><h6>Date du jour : {{ 'now' | date('d-m-Y') }}</h6></span>
-            <span><h6>Participant : {{ app.user.username }}</h6></span>
-        </div>
-    </div>
     <h3>Filtrer</h3>
     <form action="{{ path('admin_liste_des_participants') }}" method="get" class="row">
         <div class="col-xs-12 col-sm-6">
@@ -59,7 +53,7 @@
                     <td class="d-none d-sm-table-cell rouge">Inactif
                     {% endif %}
                     </td>
-                    <td><a href="{{ path('admin_participant_detail', {'id' : participant.id}) }}" class="btn btn-outline-info">Modifier</a></td>
+                    <td><a href="{{ path('admin_participant_detail', {'id' : participant.id}) }}" class="btn btn-outline-info">Detail</a></td>
                 </tr>
             {% endfor %}
         {% endif %}

@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
  * @ORM\Table(name="Participants")
  * @UniqueEntity(fields={"email"})
- * @UniqueEntity(fields={"username"})
  */
 class Participant implements UserInterface
 {
@@ -74,7 +73,7 @@ class Participant implements UserInterface
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    //private $roles = [];
 
     /**
      * @var string The hashed password
@@ -232,23 +231,23 @@ class Participant implements UserInterface
      */
     public function getRoles(): array
     {
-        return $this->roles;
-/*        if($this->getAdministrateur() == true){
+//        return $this->roles;
+        if($this->getAdministrateur() == true){
             return ['ROLE_ADMIN'];
         }elseif ($this->getActif() == true){
             return ['ROLE_USER'];
         }elseif ($this->getActif() == false) {
             return ['ROLE_USER_INACTIF'];
         }
-*/
+
     }
 
-    public function setRoles(array $roles): self
+    /*public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
         return $this;
-    }
+    }*/
 
     /**
      * Returning a salt is only needed, if you are not using a modern

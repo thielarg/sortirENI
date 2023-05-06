@@ -23,29 +23,17 @@ class AdminController extends AbstractController
     /**
      * Fonction permettant d'afficher la liste des participants (partie administrateur)
      * la requete SQL est :
-     *      SELECT * FROM participant WHERE nom = ? OR username = ? OR prenom = ?
+     *      SELECT * FROM participant WHERE email = ? OR nom = ? OR prenom = ?
      * @Route("/participants", name="liste_des_participants")
      */
-    public function listerParticipants(Request $request, EntityManagerInterface $em){
+    public function listerParticipants(Request $request, ParticipantRepository $participantRepository){
         //Si l'utilisateur n'est pas encore connecté, il lui sera demandé de se connecter (par exemple redirigé vers
         // la page de connexion).
         //Si l'utilisateur est connecté, mais n'a pas le rôle ROLE_ADMIN, il verra la page 403 (accès refusé)
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $participantsRepo = $em->getRepository(Participant::class);
-        $participantsQuery = $participantsRepo->createQueryBuilder('participant');
-        if ($request->query->get('recherche_terme')!=null){
-            $recherche_terme = $request->query->get('recherche_terme');
-            $participantsQuery->andWhere('participant.nom LIKE :recherche_terme')
-                ->setParameter("recherche_terme",'%'.$recherche_terme.'%')
-                ->orWhere("participant.username LIKE :recherche_terme")
-                ->setParameter("recherche_terme",'%'.$recherche_terme.'%')
-                ->orWhere("participant.prenom LIKE :recherche_terme")
-                ->setParameter("recherche_terme",'%'.$recherche_terme.'%');
-        };
-        $participantsQuery->orderBy('participant.id')
-            ->getQuery();
-
-        $participants = $participantsQuery;
+        $participantsQuery = $participantRepository->rechercheDetaillee(
+            $request->query->get('recherche_terme') != null ? $request->query->get('recherche_terme') : null);
+        $participants =$participantsQuery->getResult();
 
         return $this->render("admin/listeParticipant.html.twig",[
             "participants" => $participants
@@ -58,7 +46,7 @@ class AdminController extends AbstractController
      * saisie manuelle des informations
      * la requete SQL est :
      *      INSERT INTO participant
-     *      (site_id, nom, prenom, telephone, mail, administrateur, actif, username, password, photo)
+     *      (site_id, nom, prenom, telephone, email, administrateur, actif, username, password, photo)
      *      VALUES
      *      (?,?,?,?,?,?,?,?,?,?,?)
      * @Route("/inscrire", name="inscrire")
@@ -105,7 +93,8 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Fonction permettant d'afficher le detail des informations d'un participant (partie administrateur)
+     * Fonction permettant d'afficher le detail des informations d'un participant (partie administrateur),
+     * afin de pouvoir activer/desactiver ou supprimer un participant
      * la requete SQL est :
      *      SELECT * FROM participant WHERE id = ?;
      * @Route("/{id}", name="participant_detail", requirements={"id"="\d+"}, methods={"GET|POST"})
@@ -129,6 +118,38 @@ class AdminController extends AbstractController
         return $this->render('admin/detailParticipant.html.twig', [
             'participant' => $participant
         ]);
+    }
+
+    /*
+     * Fonction permettant de modifier les informations d'un utilisateur dans la BDD (partie administrateur)
+     * RDG UC
+     * la requete SQL est :
+     * @Route("/modifier/{id}", name="modifier", requirements={"id"="\d+"})
+     */
+    public function modifierParticipant($id, EntityManagerInterface $em, Request $request, ParticipantRepository $participantRepo){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        //$participantid = $request->query->get('participantid');
+        $participant = $participantRepo->find($id);
+        //creation d'une instance de ParticipantType
+        $form = $this->createForm(ParticipantType::class, $participant);
+        //je demande à Symfony d'hydrater mon $participant avec les données
+        //recues de la requete
+        $form->handleRequest($request);
+        //si le formulaire est soumis et valide alors :
+        //- sauvegarde de l'entite en BDD
+        //- ajoute un message en session pour afficher sur la prochaine page (un message flash)
+        //-je redirige vers la page liste des participants
+        if ($form->isSubmitted()) {
+            $em->persist($participant);
+            $em->flush();
+
+            $this->addFlash('success', 'Le participant a été modifié');
+            return $this->redirectToRoute('admin_liste_des_participants');
+        }
+        return $this->render('admin/modifier.html.twig', [
+            'form' => $form->createView()
+        ]);
+
     }
 
     /**
@@ -245,13 +266,5 @@ class AdminController extends AbstractController
         $this->addFlash('danger', 'Le statut de la sortie ne permet pas de l\'annuler');
         return $this->redirectToRoute("sortie_liste");
     }
-
-    /**
-     * @Route("/import_index", name="import_index")
-     */
-    public function import_index() {
-        return $this->render('/admin/importCSV.html.twig');
-    }
-
 
 }

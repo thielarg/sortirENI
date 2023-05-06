@@ -18,9 +18,6 @@ class ParticipantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username', TextType::class, [
-                'label' => 'Pseudo* :'
-            ])
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom* :'
             ])
@@ -51,7 +48,7 @@ class ParticipantType extends AbstractType
                     'required' => true,
                 ])
             ->add('photo', FileType::class, [
-                'label' => 'Photo (PNG, JPG, BMP)* :',
+                'label' => 'Photo (PNG, JPG, BMP) :',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [

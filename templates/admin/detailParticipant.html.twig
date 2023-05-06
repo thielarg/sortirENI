@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
+{% block main %}
     {{ parent() }}
     <div class="row mt-5">
         <div class="col">
@@ -27,7 +27,7 @@
                 </tr>
                 <tr>
                     <td class="texte">Email</td>
-                    <td>{{ participant.mail }}</td>
+                    <td>{{ participant.email }}</td>
                 </tr>
                 <tr>
                     <td class="texte">Ville de rattachement</td>
@@ -45,6 +45,7 @@
                 </tbody>
             </table>
             <div class="text-center">
+                <a href="{{ path('admin_modifier', {'participantid' : participant.id}) }}" class="btn btn-outline-info mr-1">Modifier</a>
                 {% if participant.actif %}
                 <a href="{{ path('admin_desactiver', {'participantid' : participant.id}) }}" class="btn btn-outline-warning mr-1">Désactiver</a>
                 {% else %}

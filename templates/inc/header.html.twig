@@ -1,15 +1,15 @@
 {% if app.user %}
 <nav class="navbar navbar-expand-sm navbar-light bg-light mb-3">
-    <a class="navbar-brand" href="#" title="Aller à l'accueil"><img src="{{ asset('image/logo.jpg') }}" alt="logo" width="100px"></a>
+    <a class="navbar-brand" href="{{ path('sortie_liste') }}" title="Aller à l'accueil"><img src="{{ asset('image/logo.jpg') }}" alt="logo" width="100px"></a>
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item"><a class="nav-link" href="{{ path('sortie_liste') }}" title="Aller à l'accueil">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" title="Gérer les informations de mon profil">Mon profil</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ path('participant_modifier') }}" title="Gérer les informations de mon profil">Mon profil</a></li>
         {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Administration</a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{ path('admin_liste_des_participants') }}" title="Gérer les participants">Participants</a>
-                <a class="dropdown-item" href="#" title="Gérer les villes">Villes</a>
+                <a class="dropdown-item" href="{{ path('ville') }}" title="Gérer les villes">Villes</a>
                 <a class="dropdown-item" href="{{ path('site_liste') }}" title="Gérer les sites">Sites</a>
             </div>
         </li>
@@ -18,6 +18,12 @@
             <a class="nav-link" href="{{ path('app_logout') }}" title="Quitter l'application">Se déconnecter</a>
         </li>
     </ul>
-    <p>Participant {{ app.user.prenom }} {{ app.user.nom }}</p>
+    <div class="row d-flex flex-row-reverse mr-1">
+        <div class="d-flex flex-column">
+            <span><h6>Date du jour : {{ 'now' | date('d-m-Y') }}</h6></span>
+            <span><h6>Participant : {{ app.user.prenom }} {{ app.user.nom }}</h6></span>
+        </div>
+    </div>
+
 </nav>
 {% endif %}

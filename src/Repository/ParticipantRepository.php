@@ -50,6 +50,42 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
             ->getOneOrNullResult();
     }
 
+    /*
+    * SELECT count(*) FROM participant WHERE username = $username OR mail = $mail
+    */
+    public function findOneByUsernameAndEmail($userName,$mail): ?Participant
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.username = :userName')
+            ->setParameter('userName', $userName)
+            ->orWhere('p.mail = :mail')
+            ->setParameter('mail',$mail)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+    /*
+    * SELECT * FROM participant WHERE email = $recherche_terme OR nom = $recherche_terme OR prenom = $recherche_terme
+    */
+    public function rechercheDetaillee($recherche_terme = null) {
+        $qb = $this->createQueryBuilder('participant');
+
+        //si le champs de rechercher participant par mot clef est renseigné
+        if($recherche_terme != null){
+            //ajoute de la clause where à la requete paramétrée
+            $qb->andWhere('participant.email LIKE :recherche_terme')
+                ->setParameter("recherche_terme",'%'.$recherche_terme.'%')
+                ->orWhere("participant.nom LIKE :recherche_terme")
+                ->setParameter("recherche_terme",'%'.$recherche_terme.'%')
+                ->orWhere("participant.prenom LIKE :recherche_terme")
+                ->setParameter("recherche_terme",'%'.$recherche_terme.'%');
+
+            $qb->orderBy('participant.id');
+        }
+        return $qb->getQuery();
+    }
+
     // /**
     //  * @return Participant[] Returns an array of Participant objects
     //  */

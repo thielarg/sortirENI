@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Création compte | {{ parent() }} {% endblock %}
+{% block title %} Création/Modification de compte | {{ parent() }} {% endblock %}
 
-{% block body %}
+{% block main %}
     {{ parent() }}
 
     <h1 class="text-center">Mon profil</h1>
@@ -18,44 +18,40 @@
     {# ouverture du formulaire #}
     {{ form_start(form) }}
 
-    {#    <div class="form-group">
-         generation du label
-        {# form_label(form.username) }}<sup>*</sup>&nbsp;:
-         affichage des erreurs
-        {{ form_errors(form.username) }}
-         generation de l'input
-        {{ form_widget(form.username) }}
-    </div>
     <div class="form-group">
-        {{ form_label(form.prenom) }}<sup>*</sup>&nbsp;:
+    <!-- generation du label -->
+        {{ form_label(form.prenom) }}
+    <!-- affichage des erreurs -->
+        {{ form_errors(form.prenom) }}
+    <!-- generation de l'input -->
         {{ form_widget(form.prenom) }}
     </div>
     <div class="form-group">
-        {{ form_label(form.nom) }}<sup>*</sup>&nbsp;:
+        {{ form_label(form.nom) }}
         {{ form_widget(form.nom) }}
     </div>
     <div class="form-group">
-        {{ form_label(form.telephone) }}<sup>*</sup>&nbsp;:
+        {{ form_label(form.telephone) }}
         {{ form_widget(form.telephone) }}
     </div>
     <div class="form-group">
-        {{ form_label(form.mail) }}<sup>*</sup>&nbsp;:
-        {{ form_widget(form.mail) }}
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email) }}
     </div>
     <div class="form-group">
         {{ form_row(form.password) }}
     </div>
     <div class="form-group">
-        {{ form_label(form.site) }}<sup>*</sup>&nbsp;:
+        {{ form_label(form.site) }}
         {{ form_widget(form.site) }}
     </div>
     <div class="form-group">
-        {{ form_label(form.photo) }}<sup>*</sup>&nbsp;:
+        {{ form_label(form.photo) }}
         {{ form_widget(form.photo) }}
     </div>
-#}
+
     {# contenu du formulaire #}
-     {{ form_widget(form) }}
+    {#  {{ form_widget(form) }}  #}
 
     <div class="text-center">
 
