@@ -20,8 +20,8 @@ class SiteRepository extends ServiceEntityRepository
     }
 
     /*
- * Fonction permettant de rechercher un site en fonction de son nom
- */
+    * Fonction permettant de rechercher un site en fonction de son nom
+    */
     public function findAjaxRecherche($recherche){
         $resultat= $this->createQueryBuilder('site')
             ->where('site.nom LIKE :recherche')

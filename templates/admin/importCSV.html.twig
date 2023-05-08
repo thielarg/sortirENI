@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
+{% block main %}
     {{ parent() }}
 
 <div class="text-center">
@@ -11,12 +11,17 @@
 
     <div class="row">
         <div class="col">
-    <input class="mt-1" name="fileCSV" type="file" accept=".csv"/>
-    <input class="btn btn-outline-primary mt-1" type="submit" value="Envoyez le fichier" />
+            <input class="mt-1" name="fileCSV" type="file" accept=".csv"/>
+            <input class="btn btn-outline-primary mt-1" type="submit" value="Envoyez le fichier" />
+            <a href="{{ path('admin_liste_des_participants') }}" class="btn btn-outline-secondary" style="margin-top: 4px;">Retour</a>
         </div>
     </div>
 
 </form>
 </div>
 
+{% endblock %}
+
+{% block title %}
+    Importer des participants | {{ parent() }}
 {% endblock %}

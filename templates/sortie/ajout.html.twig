@@ -4,7 +4,7 @@
     {{ parent() }}
 {% endblock %}
 
-{% block body %}
+{% block main %}
     {{ parent() }}
     <div class="text-center mb-5">
         <h1>Créer une sortie</h1>
@@ -16,7 +16,7 @@
                     {{ form_row(form.nom) }}
                     {{ form_row(form.dateHeureDebut) }}
                     {{ form_row(form.dateLimiteInscription) }}
-                    {{ form_row(form.nbInscriptionsMax) }}
+                    {{ form_row(form.nbInscriptionMax) }}
                     {{ form_row(form.duree) }}
     </div>
     {# colonne de droite #}

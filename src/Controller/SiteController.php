@@ -55,7 +55,7 @@ use Symfony\Component\Routing\Annotation\Route;
     /**
      * Fonction permettant de modifier le nom d'un site
      * cette fonction est appelée par la fonction JS save_row()
-     * @Route("/site/modifier", name="site_modifier")
+     * @Route("/modifier", name="modifier")
      */
     public function modifier(Request $request, EntityManagerInterface $entityManager){
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
@@ -74,7 +74,7 @@ use Symfony\Component\Routing\Annotation\Route;
     /**
      * Fonction permettant de supprimer un site
      * cette fonction est appelée par la fonction JS suppr_row()
-     * @Route("/site/supprimer", name="site_supprimer")
+     * @Route("/supprimer", name="supprimer")
      */
     public function supprimer(Request $request, EntityManagerInterface $entityManager){
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
@@ -92,10 +92,13 @@ use Symfony\Component\Routing\Annotation\Route;
     /**
      * Fonction permettant d'ajouter un site
      * cette fonction est appelée par la fonction JS sur clic bouton ajouter
-     * @Route("/site/ajouter", name="site_ajouter")
+     * @Route("/ajouter", name="ajouter")
      */
     public function ajouter(Request $request, EntityManagerInterface $entityManager){
+        //Si l'utilisateur n'est pas encore connecté, il lui sera demandé de se connecter (par exemple redirigé vers la page de connexion).
+        //Si l'utilisateur est connecté, mais n'a pas le rôle ROLE_ADMIN, il verra la page 403 (accès refusé)
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
+
         $site = new Site();
         if ($request->isXmlHttpRequest()) {
             if($entityManager->getRepository(Site::class)->findBy(['nom' => $request->request->get('nom_site')]) == null){

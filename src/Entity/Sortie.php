@@ -90,6 +90,11 @@ class Sortie
     private $lieu;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="sorties")
+     */
+    private $site;
+
+    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Participant", mappedBy="sorties")
      */
     private $participants;
@@ -227,6 +232,18 @@ class Sortie
     public function setLieu(?Lieu $lieu): self
     {
         $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Site $site): self
+    {
+        $this->site = $site;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 {%  extends "base.html.twig" %}
 
-{% block title %} Détail | {{ parent() }} {% endblock %}
+{% block title %} Détail participant | {{ parent() }} {% endblock %}
 
 {% block main %}
     {{ parent() }}
@@ -15,10 +15,6 @@
         <tbody>
         <tr>
             <td class="text-center" colspan="2"><h1>Informations du participant</h1></td>
-        </tr>
-        <tr>
-            <td>Username</td>
-            <td>{{ participant.username }}</td>
         </tr>
         <tr>
             <td>Prénom</td>

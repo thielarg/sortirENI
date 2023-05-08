@@ -2,10 +2,12 @@
 
 {% block main %}
     {{ parent() }}
-    <h1 class="text-center">Insérer un participant</h1>
+    <h1 class="text-center">Modification d'un participant</h1>
 
     {# ouverture du formulaire #}
     {{ form_start(form) }}
+
+    <!-- generation des label et des input -->
     {{ form_row(form.prenom) }}
     {{ form_row(form.nom) }}
     {{ form_row(form.telephone) }}
@@ -14,12 +16,15 @@
     {{ form_row(form.site) }}
 
     <div class="text-center">
-    <button type="submit" class="btn btn-outline-primary mr-2">Inscrire</button>
+    <button type="submit" class="btn btn-outline-primary mr-2">Modifier</button>
     <a href="{{ path('admin_liste_des_participants') }}" class="btn btn-outline-secondary ml-2">Retour</a>
     </div>
 
+    {#  cacher le surplus de champ dans ton form dans la vue avec render_rest #}
     {{ form_end(form, {render_rest:false}) }}
 {% endblock %}
 
 
-{% block title %} Inscription Participant {% endblock %}
+{% block title %}
+    Modification d'un participant | {{ parent() }}
+{% endblock %}

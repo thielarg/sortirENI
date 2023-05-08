@@ -1,91 +1,106 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Création/Modification de compte | {{ parent() }} {% endblock %}
+{% block title %}
+    Modification de mon profil | {{ parent() }}
+{% endblock %}
 
 {% block main %}
     {{ parent() }}
-
     <h1 class="text-center">Mon profil</h1>
 
-<div class="row">
-    <div class="col mt-3 mb-3 text-center">
-        {% if app.user.photo %}
+    <div class="row">
+        <div class="col mt-3 mb-3 text-center">
+            {% if app.user.photo %}
                 <img src="{{ asset('uploads/users/photos/' ~ app.user.photo) }}" alt="Photo_de_profil" class="img-thumbnail rounded img-fluid">
-        {% endif %}
-    </div>
+            {% endif %}
+        </div>
 
-<div class="col-xs-12 col-sm-9">
-    {# ouverture du formulaire #}
-    {{ form_start(form) }}
+        <div class="col-xs-12 col-sm-9">
+        {# ouverture du formulaire #}
+        {{ form_start(form) }}
 
-    <div class="form-group">
-    <!-- generation du label -->
-        {{ form_label(form.prenom) }}
-    <!-- affichage des erreurs -->
-        {{ form_errors(form.prenom) }}
-    <!-- generation de l'input -->
-        {{ form_widget(form.prenom) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.nom) }}
-        {{ form_widget(form.nom) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.telephone) }}
-        {{ form_widget(form.telephone) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.email) }}
-        {{ form_widget(form.email) }}
-    </div>
-    <div class="form-group">
-        {{ form_row(form.password) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.site) }}
-        {{ form_widget(form.site) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.photo) }}
-        {{ form_widget(form.photo) }}
-    </div>
+        {# contenu du formulaire #}
+        <div class="form-group">
+            <!-- generation du label -->
+            {{ form_label(form.prenom) }}
+            <!-- affichage des erreurs -->
+            {{ form_errors(form.prenom) }}
+            <!-- generation de l'input -->
+            {% if app.user.administrateur %}
+                {{ form_widget(form.prenom) }}
+            {% else %}
+                <input type="text" id="participant_prenom" name="participant[prenom]" disabled="disabled" required="required" class="form-control" value="{{ app.user.prenom }}">
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.nom) }}
+            {% if app.user.administrateur %}
+                {{ form_widget(form.nom) }}
+            {% else %}
+                <input type="text" id="participant_nom" name="participant[nom]" disabled="disabled" required="required" class="form-control" value="{{ app.user.nom }}">
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.telephone) }}
+            {{ form_widget(form.telephone) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.password) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.site) }}
+            {% if app.user.administrateur %}
+                {{ form_widget(form.site) }}
+            {% else %}
+                <input type="text" id="participant_site" name="participant[site]" disabled="disabled" required="required" class="form-control" value="{{ app.user.site.nom }}">
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.photo) }}
+            {{ form_widget(form.photo) }}
+        </div>
 
-    {# contenu du formulaire #}
-    {#  {{ form_widget(form) }}  #}
+        <div class="text-center">
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+                Enregistrer
+            </button>
+            {% if app.user.administrateur %}
+                <a href="{{ path('admin_liste_des_participants') }}" class="btn btn-outline-secondary ml-2">Annuler</a>
+            {% else %}
+                <a href="{{ path('sortie_liste') }}" class="btn btn-outline-secondary ml-2">Annuler</a>
+            {% endif %}
+        </div>
+        <br>
 
-    <div class="text-center">
-
-        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
-            Enregistrer
-        </button>
-        <a href="{{ path('sortie_liste') }}" class="btn btn-outline-secondary ml-2">Annuler</a>
-    </div>
-    <br>
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Confirmez !!!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Sauvegarder mon profil
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="submit" name="btnEnregistrer" class="btn btn-outline-primary mr-2">Sauvegarder</button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirmez !!!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Sauvegarder mon profil
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="submit" name="btnEnregistrer" class="btn btn-outline-primary mr-2">Sauvegarder</button>
+                    </div>
                 </div>
             </div>
         </div>
+
+        {# fermeture du formulaire #}
+        {#  cacher le surplus de champ dans ton form dans la vue avec render_rest #}
+        {{ form_end(form, {render_rest:false}) }}
+
     </div>
-
-    {# fermeture du formulaire #}
-    {{ form_end(form) }}
-
-</div>
 </div>
 
 {% endblock %}

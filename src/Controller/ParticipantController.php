@@ -17,6 +17,10 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class ParticipantController extends AbstractController
 {
     /**
+     * Fonction permettant de modifier les informations du profil de la personne connectée
+     * RDG UC 1003 - En tant qu’utilisateur, je peux gérer mes informations de profil, notamment mon nom, prénom, pseudo,
+     * email, mot de passe, et téléphone. Le pseudo doit être unique entre tous les participants.
+     * la requete SQL est : UPDATE participants SET ... WHERE id= ?
      * @Route("/modifier", name="modifier")
      */
     public function modifier(EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $encoder){
@@ -45,7 +49,6 @@ class ParticipantController extends AbstractController
                 $file->move($this->getParameter('users_photos_directory'), $fileName);
                 //hydrate la photo dans l'objet
                 $participant->setPhoto($fileName);
-
             }
             //hashage du password
             $hash=$encoder->encodePassword($participant, $participant->getPassword());
@@ -66,6 +69,10 @@ class ParticipantController extends AbstractController
     }
 
     /**
+     * Fonction permettant d'afficher les informations d'un participant
+     * RDG UC 1003 - En tant qu’utilisateur, je peux gérer mes informations de profil, notamment mon nom, prénom, pseudo,
+     * email, mot de passe, et téléphone. Le pseudo doit être unique entre tous les participants.
+     * la requete SQL est : SELECT ... FROM participants WHERE id= ?
      * @Route("/detail/{id}", name="detail",
      *     requirements={"id"="\d+"}, methods={"GET|POST"})
      */

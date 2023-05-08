@@ -21,7 +21,7 @@ $( document ).ready(function() {
     function rechercherVille(term) {
         $.ajax({
             method: "POST",
-            url: "/sortir/public/ville/recherche", /* appel de VilleController route /ville/recherche */
+            url: "/sortirENI/public/ville/recherche", /* appel de VilleController route /ville/recherche */
             data: {'recherche': term},   /* passage de l'argument dans la data */
             success: function (reponse) {
                 //console.log(reponse)
@@ -86,7 +86,7 @@ $( document ).ready(function() {
                     var new_cp_ville = $('#new_code_postal_ville').val();
                     $.ajax({
                         method: "POST",
-                        url: "/sortir/public/ville/ajouter", /* appel de VilleController route /ville/ajouter */
+                        url: "/sortirENI/public/ville/ajouter", /* appel de VilleController route /ville/ajouter */
                         data: {'nom_ville': new_nom, 'cp_ville': new_cp_ville} /* passage des data */
                     }).done(function (response) { /* si ajout reussi */
                         $('#message').html(
@@ -150,7 +150,7 @@ $( document ).ready(function() {
 
         $.ajax({
             method: "POST",
-            url: "/sortir/public/ville/modifier", /* appel de VilleController route /ville/modifier */
+            url: "/sortirENI/public/ville/modifier", /* appel de VilleController route /ville/modifier */
             data: {
                 'id': no,
                 'nom_ville': nom_ville,
@@ -198,7 +198,7 @@ $( document ).ready(function() {
         //console.log(no);
         $.ajax({
             method: "POST",
-            url: "/sortir/public/ville/supprimer", /* appel de VilleController route /ville/supprimer */
+            url: "/sortirENI/public/ville/supprimer", /* appel de VilleController route /ville/supprimer */
             data: {
                 'id': no
             }                       /* passage de la data */

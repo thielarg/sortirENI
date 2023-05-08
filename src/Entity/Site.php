@@ -30,6 +30,11 @@ class Site
     private $nom;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Sortie", mappedBy="site")
+     */
+    private $sorties;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Participant", mappedBy="site")
      */
     private $participants;
@@ -52,6 +57,37 @@ class Site
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sortie[]
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSortie(Sortie $sortie): self
+    {
+        if (!$this->sorties->contains($sortie)) {
+            $this->sorties[] = $sortie;
+            $sortie->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSortie(Sortie $sortie): self
+    {
+        if ($this->sorties->contains($sortie)) {
+            $this->sorties->removeElement($sortie);
+            // set the owning side to null (unless already changed)
+            if ($sortie->getSite() === $this) {
+                $sortie->setSite(null);
+            }
+        }
 
         return $this;
     }

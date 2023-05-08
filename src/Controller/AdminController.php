@@ -34,7 +34,6 @@ class AdminController extends AbstractController
         $participantsQuery = $participantRepository->rechercheDetaillee(
             $request->query->get('recherche_terme') != null ? $request->query->get('recherche_terme') : null);
         $participants =$participantsQuery->getResult();
-
         return $this->render("admin/listeParticipant.html.twig",[
             "participants" => $participants
         ]);
@@ -97,7 +96,7 @@ class AdminController extends AbstractController
      * afin de pouvoir activer/desactiver ou supprimer un participant
      * la requete SQL est :
      *      SELECT * FROM participant WHERE id = ?;
-     * @Route("/{id}", name="participant_detail", requirements={"id"="\d+"}, methods={"GET|POST"})
+     * @Route("/detail/{id}", name="participant_detail", requirements={"id"="\d+"}, methods={"GET|POST"})
      */
     public function detailParticipant($id, ParticipantRepository $participantRepo){
         //Si l'utilisateur n'est pas encore connecté, il lui sera demandé de se connecter (par exemple redirigé vers
@@ -120,13 +119,23 @@ class AdminController extends AbstractController
         ]);
     }
 
-    /*
-     * Fonction permettant de modifier les informations d'un utilisateur dans la BDD (partie administrateur)
-     * RDG UC
+    /**
+     * Fonction permettant d'afficher le detail des informations d'un participant (partie administrateur),
+     * afin de pouvoir activer/desactiver ou supprimer un participant
      * la requete SQL est :
-     * @Route("/modifier/{id}", name="modifier", requirements={"id"="\d+"})
+     *      SELECT * FROM participant WHERE id = ?;
+     * @Route("/modifier/{id}", name="participant_modifier", requirements={"id"="\d+"}, methods={"GET|POST"})
      */
-    public function modifierParticipant($id, EntityManagerInterface $em, Request $request, ParticipantRepository $participantRepo){
+    public function modifierParticipant(
+                                        $id,
+                                        Request $request,
+                                        ParticipantRepository $participantRepo,
+                                        EntityManagerInterface $em,
+                                        UserPasswordEncoderInterface $encoder
+                                        ){
+        //Si l'utilisateur n'est pas encore connecté, il lui sera demandé de se connecter (par exemple redirigé vers
+        // la page de connexion).
+        //Si l'utilisateur est connecté, mais n'a pas le rôle ROLE_ADMIN, il verra la page 403 (accès refusé)
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         //$participantid = $request->query->get('participantid');
         $participant = $participantRepo->find($id);
@@ -140,12 +149,27 @@ class AdminController extends AbstractController
         //- ajoute un message en session pour afficher sur la prochaine page (un message flash)
         //-je redirige vers la page liste des participants
         if ($form->isSubmitted()) {
+            if($form->get('photo')->getData() != null){
+                //chargement de la photo
+                $file = $form->get('photo')->getData();
+                //encodage MD5 du nom de la photo
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                //stockage sur le serveur
+                $file->move($this->getParameter('users_photos_directory'), $fileName);
+                //hydrate la photo dans l'objet
+                $participant->setPhoto($fileName);
+            }
+            //hashage du password
+            $hash=$encoder->encodePassword($participant, $participant->getPassword());
+            //hydrate le mot de passe hashé dans l'objet
+            $participant->setPassword($hash);
             $em->persist($participant);
             $em->flush();
 
             $this->addFlash('success', 'Le participant a été modifié');
             return $this->redirectToRoute('admin_liste_des_participants');
         }
+        //-je redirige vers la page détail du participant
         return $this->render('admin/modifier.html.twig', [
             'form' => $form->createView()
         ]);
