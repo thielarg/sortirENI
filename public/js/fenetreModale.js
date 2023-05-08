@@ -10,7 +10,7 @@ url = appel de la methode ville_rechercher du controller AjaxController (route =
 function chargerListeVilles(){
     $.ajax({
         method: "POST",
-        url: "/sortir/public/ajax/ville_rechercher",
+        url: "/sortirENI/public/ajax/ville_rechercher",
         data: {
             'recherche': ''
             },
@@ -42,7 +42,7 @@ data = données id dans la modale
 function ajouterLieu(){
      $.ajax({
          method: "GET",
-         url: "/sortir/public/lieu/ajouterAjax",
+         url: "/sortirENI/public/lieu/ajouterAjax",
          data:{
              'ville_id': $('#selectVille').val(),
              'lieu_nom': $('#inputNomLieu').val(),

@@ -13,7 +13,7 @@ $(document).on('change', '#sortie_ville', function () {
 function chargerListeLieux(){
     $.ajax({
         method: "POST",
-        url: "/sortir/public/ajax/rechercheLieuByVille", /* appel de la fonction rechercheLieuByVille du controlleur AjaxController*/
+        url: "/sortirENI/public/ajax/rechercheLieuByVille", /* appel de la fonction rechercheLieuByVille du controlleur AjaxController*/
         data: {
             'ville_id' : $('#sortie_ville').val() //recupération de la ville dans la data
         }
