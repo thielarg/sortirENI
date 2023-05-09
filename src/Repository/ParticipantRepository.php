@@ -51,15 +51,14 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
     }
 
     /*
-    * SELECT count(*) FROM participant WHERE username = $username OR mail = $mail
-    */
-    public function findOneByUsernameAndEmail($userName,$mail): ?Participant
+     * Fonction utilisée pour l'import d'un fichier au format .csv
+     * SELECT count(*) FROM participant WHERE username = $username OR mail = $mail
+     */
+    public function findOneByEmail($email): ?Participant
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.username = :userName')
-            ->setParameter('userName', $userName)
-            ->orWhere('p.mail = :mail')
-            ->setParameter('mail',$mail)
+            ->andWhere('p.email = :email')
+            ->setParameter('email',$email)
             ->getQuery()
             ->getOneOrNullResult()
             ;

@@ -43,7 +43,7 @@ class SortieType extends AbstractType
             ->add('ville', EntityType::class,[
                     'class' => 'App\Entity\Ville',
                     'label'=>'Ville :',
-                    'mapped' => false,
+                    'mapped' => false, //à ne pas oublier car la vile n'est pas referencée dans l'entité sortie
                     'choice_label' => 'nom',
                     'placeholder' => 'Selectionner une ville',
                     'required' => false
@@ -51,6 +51,7 @@ class SortieType extends AbstractType
             )
         ;
 
+        /* Evenement declenché après avoir rempli l'entité */
         $builder->get('ville')->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event){
@@ -59,6 +60,7 @@ class SortieType extends AbstractType
             }
         );
 
+        /* Evenement déclenché juste avant la fin du chargement des données dans le formulaire */
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
             function (FormEvent $event){
@@ -78,6 +80,7 @@ class SortieType extends AbstractType
         );
     }
 
+    //ajout du select lieu au formulaire
     private function addLieuField(FormInterface $form, ?Ville $ville){
         $builder = $form->add('lieu', EntityType::class,[
             'class' => Lieu::class,

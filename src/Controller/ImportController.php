@@ -10,9 +10,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+
 
 class ImportController extends AbstractController
 {
+    private $encoderFactory;
+
+    public function __construct(EncoderFactoryInterface $encoderFactory)
+    {
+        $this->encoderFactory = $encoderFactory;
+    }
+
+
     /**
      * @Route("/admin/import_index", name="admin_import_index")
      */
@@ -23,7 +33,11 @@ class ImportController extends AbstractController
     /**
      * @Route("/admin/import_action", name="admin_import_action")
      */
-    public function importAction(EntityManagerInterface $em, Request $request, SiteRepository $siteRepo, ParticipantRepository $participantRepo)
+    public function import_action(
+        EntityManagerInterface $em,
+        Request $request,
+        SiteRepository $siteRepo,
+        ParticipantRepository $participantRepo)
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
@@ -55,11 +69,10 @@ class ImportController extends AbstractController
                             "nom" => $data[1],
                             "prenom" => $data[2],
                             "telephone" => $data[3],
-                            "mail" => $data[4],
+                            "email" => $data[4],
                             "administrateur" => $data[5],
                             "actif" => $data[6],
-                            "username" => $data[7],
-                            "password" => $data[8],
+                            "password" => $data[7],
                         );
                     }
                     //fermeture du fichier
@@ -73,7 +86,7 @@ class ImportController extends AbstractController
                     $user = new Participant();
 
                     // Encodage du mot de passe
-                    $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+                    $encoder = $this->encoderFactory->getEncoder($user);
                     $plainpassword = $utilisateur["password"];
                     $password = $encoder->encodePassword($plainpassword, $user->getSalt());
 
@@ -85,16 +98,13 @@ class ImportController extends AbstractController
                     $user->setNom(str_replace('\"', '', $utilisateur["nom"]));
                     $user->setPrenom(str_replace('\"', '', $utilisateur["prenom"]));
                     $user->setTelephone(str_replace('\"', '', $utilisateur["telephone"]));
-                    $user->setMail(str_replace('\"', '', $utilisateur["mail"]));
+                    $user->setEmail(str_replace('\"', '', $utilisateur["email"]));
                     $user->setAdministrateur($utilisateur["administrateur"]);
                     $user->setActif($utilisateur["actif"]);
-                    $user->setUsername(str_replace('\"', '', $utilisateur["username"]));
                     $user->setPassword($password);
 
                     //test l'enregistrement avant d'insérer
-                    //$userTestExistence = $participantRepo->findOneBy(['username' => $user->getUsername()]);
-                    $userTestExistence = $participantRepo->findOneByUsernameAndEmail($user->getUsername(),$user->getMail());
-                    //TODO faire le controle sur l'email aussi
+                    $userTestExistence = $participantRepo->findOneByEmail($user->getEmail());
                     if ($userTestExistence == null) {
                         // Enregistrement de l'objet en vu de son écriture dans la base de données
                         $em->persist($user);

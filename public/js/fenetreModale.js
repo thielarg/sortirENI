@@ -5,12 +5,12 @@ By Thierry Largeau
 
 /* fonction permettant de charger la liste déroulante selectVille
 method = POST
-url = appel de la methode ville_rechercher du controller AjaxController (route = /ajax/ville_rechercher)
+url = appel de la methode rechercherVille du controller AjaxController (route = /ajax/rechercherVille)
 */
 function chargerListeVilles(){
     $.ajax({
         method: "POST",
-        url: "/sortirENI/public/ajax/ville_rechercher",
+        url: "/sortirENI/public/ajax/rechercherVille",
         data: {
             'recherche': ''
             },
@@ -32,17 +32,18 @@ chargerListeVilles();
 /* sur clic du bouton Ajouter de la modale, appel de la fonction ajouterLieu */
 $('#inputEnregistrerLieu').on('click', ajouterLieu);
 
+/*pour réinitialiser les valeurs */
 $('#inputReinitialiser').on('click', reinitialiser);
 
 /* fonction permettant d'ajouter le lieu
-method = POST
-url = appel de la methode ajouterAjax du controller LieuController (route = /lieu/ajouterAjax)
+method = GET
+url = appel de la methode ajouterLieu du controller AjaxController (route = /ajax/ajouterLieu)
 data = données id dans la modale
 */
 function ajouterLieu(){
      $.ajax({
          method: "GET",
-         url: "/sortirENI/public/lieu/ajouterAjax",
+         url: "/sortirENI/public/ajax/ajouterLieu",
          data:{
              'ville_id': $('#selectVille').val(),
              'lieu_nom': $('#inputNomLieu').val(),
@@ -59,7 +60,7 @@ function ajouterLieu(){
                  'Lieu ajouté!' +
                   '</div>')
            );
-        chargerListeLieux();
+        chargerListeLieux(); /*appel à la fonction chargerListeLieux de listesLiees.js, afin de reactualiser la liste des lieux*/
     }).fail(function(xhr){
         /* probleme ajout lieu */
         $('#modal_nouveau_lieu_message')
@@ -72,6 +73,7 @@ function ajouterLieu(){
     })
 }
 
+/* fonction permettant de réinitialiser les valeurs */
 function reinitialiser() {
     $('#inputNomLieu').val('');
     $('#inputRueLieu').val('');

@@ -33,32 +33,4 @@ class LieuController extends AbstractController
         }
     }
 
-    /**
-     * Fonction permettant d'ajouter un lieu à une ville
-     * Utilisée dans la fenetre modale (ajout lieu)
-     * RDG UC 2014: En tant que participant je peux ajouter des lieux dans la plateforme.
-     * @Route("/lieu/ajouterAjax", name="lieu_ajouter_ajax")
-     */
-    public function ajouterAjax(Request $request , EntityManagerInterface $entityManager, VilleRepository  $villeRepo){
-        if($this->getUser() != null){
-            $lieu = new Lieu();
-            try{
-                $ville = $villeRepo->find($request->query->get('ville_id'));
-                $lieu->setNom($request->query->get('lieu_nom'));
-                $lieu->setVille($ville);
-                $lieu->setRue($request->query->get('lieu_rue'));
-                $lieu->setLongitude($request->query->get('lieu_longitude'));
-                $lieu->setLatitude($request->query->get('lieu_latitude'));
-                $entityManager->persist($lieu);
-                $entityManager->flush();
-                return new Response('Ajout effectué.');
-            }catch (\Exception $e){
-                $content = json_encode(array('message' => 'You are not allowed to delete this post'));
-                return new Response($content, 419);
-            }
-        }
-        else{
-            throw new AccessDeniedException('Que viens-tu voir par là!');
-        }
-    }
 }
