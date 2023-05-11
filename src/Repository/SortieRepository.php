@@ -52,17 +52,16 @@ class SortieRepository extends ServiceEntityRepository
     public function rechercheDetaillee($recherche_terme = null, $siteId = null,$etat = null, $date_debut = null, $date_fin = null, $organisateur = null, $inscrit = null, $non_inscrit = null, $passee = null) {
         //construction de la requete jointée naturelle avec les entités sortie/site/organisateur/etat
         $qb = $this->createQueryBuilder('sortie')
-//            ->join('sortie.site', 'site')
+            ->join('sortie.site', 'site')
             ->join('sortie.organisateur', 'organisateur')
             ->join('sortie.etat' , 'etat')
- //           ->addSelect('site')
+            ->addSelect('site')
             ->addSelect('organisateur')
             ->addSelect('etat');
 
         //si le champs de rechercher sortie par mot clef est renseigné
         if($recherche_terme != null){
             //ajoute de la clause where à la requete paramétrée
-            //$qb->andWhere('sortie.nom LIKE :recherche_terme')
             $qb->andWhere($qb->expr()->like('sortie.nom',':recherche_terme'))
                 ->setParameter('recherche_terme', '%'.$recherche_terme.'%');
         }

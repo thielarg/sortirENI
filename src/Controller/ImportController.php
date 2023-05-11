@@ -70,9 +70,10 @@ class ImportController extends AbstractController
                             "prenom" => $data[2],
                             "telephone" => $data[3],
                             "email" => $data[4],
-                            "administrateur" => $data[5],
-                            "actif" => $data[6],
-                            "password" => $data[7],
+                            "pseudo"=>$data[5],
+                            "administrateur" => $data[6],
+                            "actif" => $data[7],
+                            "password" => $data[8],
                         );
                     }
                     //fermeture du fichier
@@ -99,6 +100,7 @@ class ImportController extends AbstractController
                     $user->setPrenom(str_replace('\"', '', $utilisateur["prenom"]));
                     $user->setTelephone(str_replace('\"', '', $utilisateur["telephone"]));
                     $user->setEmail(str_replace('\"', '', $utilisateur["email"]));
+                    $user->setPseudo(str_replace('\"', '', $utilisateur["pseudo"]));
                     $user->setAdministrateur($utilisateur["administrateur"]);
                     $user->setActif($utilisateur["actif"]);
                     $user->setPassword($password);

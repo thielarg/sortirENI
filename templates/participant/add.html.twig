@@ -21,6 +21,10 @@
 
         {# contenu du formulaire #}
         <div class="form-group">
+            {{ form_label(form.pseudo) }}
+            {{ form_widget(form.pseudo) }}
+        </div>
+        <div class="form-group">
             <!-- generation du label -->
             {{ form_label(form.prenom) }}
             <!-- affichage des erreurs -->
@@ -29,7 +33,7 @@
             {% if app.user.administrateur %}
                 {{ form_widget(form.prenom) }}
             {% else %}
-                <input type="text" id="participant_prenom" name="participant[prenom]" disabled="disabled" required="required" class="form-control" value="{{ app.user.prenom }}">
+                {{ form_widget(form.prenom, {'attr': {'readonly': 'readonly'}}) }}
             {% endif %}
         </div>
         <div class="form-group">
@@ -37,7 +41,7 @@
             {% if app.user.administrateur %}
                 {{ form_widget(form.nom) }}
             {% else %}
-                <input type="text" id="participant_nom" name="participant[nom]" disabled="disabled" required="required" class="form-control" value="{{ app.user.nom }}">
+                {{ form_widget(form.nom, {'attr': {'readonly': 'readonly'}}) }}
             {% endif %}
         </div>
         <div class="form-group">
@@ -56,15 +60,15 @@
             {% if app.user.administrateur %}
                 {{ form_widget(form.site) }}
             {% else %}
-                <input type="text" id="participant_site" name="participant[site]" disabled="disabled" required="required" class="form-control" value="{{ app.user.site.nom }}">
+                {{ form_widget(form.site, {'attr': {'readonly': 'readonly'}}) }}
             {% endif %}
         </div>
         <div class="form-group">
             {{ form_label(form.photo) }}
-            {{ form_widget(form.photo) }}
+            {{ form_widget(form.photo, {'attr': {'onchange': 'displayFileName(this)'}}) }}
         </div>
 
-        <div class="text-center">
+            <div class="text-center">
             <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
                 Enregistrer
             </button>
@@ -104,3 +108,15 @@
 </div>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+<script>
+    function displayFileName(input) {
+        const fileName = input.files[0].name;
+        const label = input.nextElementSibling;
+        label.innerText = fileName;
+    }
+</script>
+{% endblock %}
+

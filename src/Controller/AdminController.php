@@ -65,7 +65,6 @@ class AdminController extends AbstractController
         //j'hydrate certains attributs
         $participant->setAdministrateur(false);
         $participant->setActif(true);
-        //$participant->setRoles(["ROLE_USER"]);
         //creation d'une instance de ParticipantType
         $form = $this->createForm(ParticipantType::class, $participant);
         //je demande à Symfony d'hydrater mon $participant avec les données
@@ -163,10 +162,12 @@ class AdminController extends AbstractController
             $hash=$encoder->encodePassword($participant, $participant->getPassword());
             //hydrate le mot de passe hashé dans l'objet
             $participant->setPassword($hash);
+            //demande de modification en BDD
             $em->persist($participant);
             $em->flush();
-
+            //mise en session d'un message flash
             $this->addFlash('success', 'Le participant a été modifié');
+            //redirection vers la page "liset des participants"
             return $this->redirectToRoute('admin_liste_des_participants');
         }
         //-je redirige vers la page détail du participant

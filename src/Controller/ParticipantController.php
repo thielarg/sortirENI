@@ -32,6 +32,7 @@ class ParticipantController extends AbstractController
         //recues de la requete
         $modifForm->handleRequest($request);
 
+        //dd($participant);
         //si le formulaire est soumis et valide alors :
         //- chargement de la photo, puis encodage MD5 du nom de la photo et stockage sur le serveur. Puis j'hydrate la
         // photo dans l'objet
@@ -39,7 +40,7 @@ class ParticipantController extends AbstractController
         //- sauvegarde de l'entite en BDD
         //- ajoute un message en session pour afficher sur la prochaine page (un message flash)
         //- je redirige vers la même page
-        if ($modifForm->isSubmitted() && $modifForm->isValid()){
+        if ($modifForm->isSubmitted() ){
             if($modifForm->get('photo')->getData() != null){
                 //chargement de la photo
                 $file = $modifForm->get('photo')->getData();

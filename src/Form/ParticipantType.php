@@ -18,6 +18,9 @@ class ParticipantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('pseudo', TextType::class, [
+                'label' => 'Pseudo* :'
+            ])
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom* :'
             ])
@@ -49,15 +52,19 @@ class ParticipantType extends AbstractType
                 ])
             ->add('photo', FileType::class, [
                 'label' => 'Photo (PNG, JPG, BMP) :',
-                'mapped' => false,
+
+
                 'required' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',
                         'mimeTypes' => [
-                            'image/*'
+                            'image/png',
+                            'image/jpg',
+                            'image/bmp'
                         ],
-                        'mimeTypesMessage' => 'Merci de sélectionner un fichier image.',
+                        'mimeTypesMessage' => 'Merci de sélectionner un fichier PNG, JPG, BMP valide.',
+                        'maxSizeMessage' => 'La taille du fichier ne peut pas dépasser 1024 Ko'
                     ])
                 ],
             ])

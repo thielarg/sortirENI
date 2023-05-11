@@ -47,6 +47,13 @@ class Participant implements UserInterface
     private $telephone;
 
     /**
+     * @ORM\Column(type="string", length=30, unique=true)
+     * @Assert\Length(max=30, maxMessage="{{ limit }} caractères maxi")
+     * @Assert\NotBlank()
+     */
+    private $pseudo;
+
+    /**
      * @ORM\Column(type="string", length=100, unique=true)
      * @Assert\Length(max=100, maxMessage="{{ limit }} caractères maxi")
      * @Assert\NotBlank()
@@ -161,6 +168,18 @@ class Participant implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): self
+    {
+        $this->pseudo = $pseudo;
 
         return $this;
     }
