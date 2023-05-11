@@ -89,7 +89,11 @@
                     {% else %}
                     {%  for participant in sortie.participants %}
                         <tr>
-                            <td class="d-none d-sm-table-cell"><a href="{{ path('participant_detail', { 'id' : participant.id }) }}">{{ participant.username }}</a></td>
+                            {% if (app.user.username == sortie.organisateur.username) or (app.user.administrateur == 1) or (app.user in sortie.participants) %}
+                                <td class="d-none d-sm-table-cell"><a href="{{ path('participant_detail', { 'id' : participant.id }) }}">{{ participant.username }}</a></td>
+                            {% else %}
+                                <td class="d-none d-sm-table-cell">{{ participant.username }}</td>
+                            {% endif %}
                             <td> {{ participant.prenom}} {{ participant.nom | upper}}</td>
                             <td class="d-sm-none"> {{ participant.site.nom | upper}}</td>
                         </tr>
