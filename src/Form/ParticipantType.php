@@ -52,8 +52,7 @@ class ParticipantType extends AbstractType
                 ])
             ->add('photo', FileType::class, [
                 'label' => 'Photo (PNG, JPG, BMP) :',
-
-
+                'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new File([
@@ -61,10 +60,10 @@ class ParticipantType extends AbstractType
                         'mimeTypes' => [
                             'image/png',
                             'image/jpg',
-                            'image/bmp'
+                            'image/bmp',
                         ],
                         'mimeTypesMessage' => 'Merci de sélectionner un fichier PNG, JPG, BMP valide.',
-                        'maxSizeMessage' => 'La taille du fichier ne peut pas dépasser 1024 Ko'
+                        'maxSizeMessage' => 'La taille du fichier ne peut pas dépasser 1024 Ko',
                     ])
                 ],
             ])
